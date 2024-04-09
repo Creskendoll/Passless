@@ -3,5 +3,5 @@
 export const argon2idParams = {
     m: 12288,
     t: 3,
-    p: 1
+    p: 1,
 };

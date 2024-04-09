@@ -1,8 +1,8 @@
 'use server';
 
-import { redirect } from "next/navigation";
-import LoginForm from "./loginForm";
-import { getUserFromSession } from "../session";
+import { redirect } from 'next/navigation';
+import LoginForm from './loginForm';
+import { getUserFromSession } from '../session';
 
 export default async function Login() {
     const user = await getUserFromSession();
@@ -11,7 +11,5 @@ export default async function Login() {
         redirect('/vault');
     }
 
-    return (
-        <LoginForm />
-    );
+    return <LoginForm />;
 }

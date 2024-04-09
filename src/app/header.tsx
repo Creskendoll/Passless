@@ -15,7 +15,7 @@ export async function Header() {
             <Link href="/">
                 <Image src="/logo.jpg" width={198} height={88} alt="Passless"></Image>
             </Link>
-            {(user !== null && user.passphraseHash !== undefined) && (
+            {user !== null && user.passphraseHash !== undefined && (
                 <div className="grid content-center">
                     <LogoutButton />
                 </div>

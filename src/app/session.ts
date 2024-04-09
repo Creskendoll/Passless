@@ -1,7 +1,7 @@
-import { randomBytes } from "crypto";
-import { Session, User, IUser } from "../database/schemas";
-import { cookies } from "next/headers";
-import { Types } from "mongoose";
+import { randomBytes } from 'crypto';
+import { Session, User, IUser } from '../database/schemas';
+import { cookies } from 'next/headers';
+import { Types } from 'mongoose';
 
 export async function createSession(userId: Types.ObjectId): Promise<string> {
     // Create session, update user, and set cookie
@@ -9,12 +9,16 @@ export async function createSession(userId: Types.ObjectId): Promise<string> {
     const user = await User.findById(userId);
     // TODO: could it be better to use UUID?
     const sessionId = randomBytes(32).toString('base64');
-    await Session.replaceOne({}, {
-        user: user._id,
-        sid: sessionId
-    }, {
-        upsert: true
-    });
+    await Session.replaceOne(
+        {},
+        {
+            user: user._id,
+            sid: sessionId,
+        },
+        {
+            upsert: true,
+        }
+    );
 
     user.sessionIds.push(sessionId);
     await user.save();
@@ -24,23 +28,21 @@ export async function createSession(userId: Types.ObjectId): Promise<string> {
         value: sessionId,
         httpOnly: true,
         path: '/',
-        sameSite: 'strict'
+        sameSite: 'strict',
     });
 
     return sessionId;
 }
 
 export async function destroySessionBySID(sid: string) {
-    const session = await Session.findOne({ 'sid': sid });
+    const session = await Session.findOne({ sid: sid });
     const user = await User.findById(session.user);
 
     if (session === null || user === null) {
         return;
     }
 
-    user.sessionIds = user.sessionIds.filter(
-        (s: string) => s !== sid
-    );
+    user.sessionIds = user.sessionIds.filter((s: string) => s !== sid);
 
     await user.save();
     await Session.findByIdAndDelete(session._id);

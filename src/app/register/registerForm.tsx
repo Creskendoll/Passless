@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useState } from "react";
-import { bytesToHex } from "@noble/hashes/utils";
-import { rand } from "../utils";
-import { pbkdf2 } from "@noble/hashes/pbkdf2";
-import { pbkdf2Params } from "../params";
-import { sha256 } from "@noble/hashes/sha256";
-import { randomBytes } from "@noble/hashes/utils";
+import { useCallback, useEffect, useState } from 'react';
+import { bytesToHex } from '@noble/hashes/utils';
+import { rand } from '../utils';
+import { pbkdf2 } from '@noble/hashes/pbkdf2';
+import { pbkdf2Params } from '../params';
+import { sha256 } from '@noble/hashes/sha256';
+import { randomBytes } from '@noble/hashes/utils';
 
 // TODO:
 // - make this into a server component
 // - redirect to vault if user is already signed in
 // - in the future, it will be necessary to allow user to reset passphrase
 export default function RegisterForm() {
-    const [username, setUsername] = useState<string>("");
+    const [username, setUsername] = useState<string>('');
     const [wordList, setWordList] = useState<string[]>([]);
     const [passphrase, setPassphrase] = useState<string[]>();
     const [passphraseKeyData, setPassphraseKeyData] = useState<Uint8Array>();
@@ -22,15 +22,13 @@ export default function RegisterForm() {
     const [loading, setLoading] = useState<boolean>(true);
 
     const genRandPassphrase = (words: string[]) => {
-        return new Array(6)
-            .fill("")
-            .map(() => words[Math.floor(rand() * words.length)]);
+        return new Array(6).fill('').map(() => words[Math.floor(rand() * words.length)]);
     };
 
     const populateWordList = useCallback(async (): Promise<string[]> => {
         // Get word list
-        const wordText = await (await fetch("/wordlist.txt")).text();
-        const words = wordText.split("\n");
+        const wordText = await (await fetch('/wordlist.txt')).text();
+        const words = wordText.split('\n');
         if (!words.length) return [];
         setWordList(words);
 
@@ -45,8 +43,8 @@ export default function RegisterForm() {
 
             // Fetch valid username
             const rJson = await (
-                await fetch("/api/user", {
-                    method: "POST",
+                await fetch('/api/user', {
+                    method: 'POST',
                 })
             ).json();
             setUsername(rJson.username);
@@ -61,13 +59,11 @@ export default function RegisterForm() {
             // Prevent user interaction until key generation is complete
             setLoading(true);
 
-            const passString = phrase.join("-");
+            const passString = phrase.join('-');
             const keySalt = randomBytes(16);
             setPassphraseKeySalt(keySalt);
 
-            setPassphraseKeyData(
-                pbkdf2(sha256, passString, keySalt, pbkdf2Params)
-            );
+            setPassphraseKeyData(pbkdf2(sha256, passString, keySalt, pbkdf2Params));
 
             // Salting the passphrase hash with username
             // will allow us to calculate the passphrase hash
@@ -76,29 +72,20 @@ export default function RegisterForm() {
 
             setLoading(false);
         },
-        [
-            setLoading,
-            setPassphraseKeySalt,
-            setPassphraseKeyData,
-            setPassphraseHash,
-        ]
+        [setLoading, setPassphraseKeySalt, setPassphraseKeyData, setPassphraseHash]
     );
 
     useEffect(() => {
-        populateWordList()
-            .then(populateCredentials)
-            .then(populatePassphraseMeta);
+        populateWordList().then(populateCredentials).then(populatePassphraseMeta);
     }, [populateCredentials, populateWordList, populatePassphraseMeta]);
 
     return (
         <main className="flex justify-center">
             <div className="w-xl my-10">
-                <h2 className="text-3xl font-bold mb-5">
-                    Generate Username and Passphrase
-                </h2>
+                <h2 className="text-3xl font-bold mb-5">Generate Username and Passphrase</h2>
                 <p>
-                    You will need your username and passphrase to access your
-                    account. Please write them down and don&apos;t lose them.
+                    You will need your username and passphrase to access your account. Please write them down and
+                    don&apos;t lose them.
                 </p>
 
                 <h3 className="text-xl font-medium my-5">Username</h3>
@@ -111,14 +98,12 @@ export default function RegisterForm() {
                 <div className="flex justify-center">
                     <button
                         className={
-                            loading
-                                ? "inline font-bold cursor-wait"
-                                : "inline font-bold cursor-pointer hover:underline"
+                            loading ? 'inline font-bold cursor-wait' : 'inline font-bold cursor-pointer hover:underline'
                         }
                         onClick={() => {
                             if (!loading) {
-                                fetch("/api/user", {
-                                    method: "POST",
+                                fetch('/api/user', {
+                                    method: 'POST',
                                 })
                                     .then((r) => r.json())
                                     .then((rJson) => {
@@ -127,10 +112,7 @@ export default function RegisterForm() {
                             }
                         }}
                     >
-                        <img
-                            className="inline w-8 h-8 my-5"
-                            src="/reset.svg"
-                        ></img>
+                        <img className="inline w-8 h-8 my-5" src="/reset.svg"></img>
                         Regenerate username
                     </button>
                 </div>
@@ -150,21 +132,14 @@ export default function RegisterForm() {
                 </div>
                 <div className="flex justify-center">
                     <button
-                        className={
-                            loading
-                                ? "font-bold cursor-wait"
-                                : "font-bold cursor-pointer hover:underline"
-                        }
+                        className={loading ? 'font-bold cursor-wait' : 'font-bold cursor-pointer hover:underline'}
                         onClick={() => {
                             if (!loading) {
                                 setPassphrase(genRandPassphrase(wordList));
                             }
                         }}
                     >
-                        <img
-                            className="inline w-8 h-8 my-5"
-                            src="/reset.svg"
-                        ></img>
+                        <img className="inline w-8 h-8 my-5" src="/reset.svg"></img>
                         Regenerate passphrase
                     </button>
                 </div>
@@ -172,8 +147,8 @@ export default function RegisterForm() {
                     <button
                         className={
                             loading
-                                ? "block button bg-dark-purple m-3 px-6 py-2 w-96 rounded-3xl text-white font-bold cursor-wait"
-                                : "block button bg-dark-purple m-3 px-6 py-2 w-96 rounded-3xl text-white font-bold cursor-pointer"
+                                ? 'block button bg-dark-purple m-3 px-6 py-2 w-96 rounded-3xl text-white font-bold cursor-wait'
+                                : 'block button bg-dark-purple m-3 px-6 py-2 w-96 rounded-3xl text-white font-bold cursor-pointer'
                         }
                         onClick={async () => {
                             if (
@@ -184,57 +159,47 @@ export default function RegisterForm() {
                             ) {
                                 setLoading(true);
 
-                                const vaultKey =
-                                    await window.crypto.subtle.generateKey(
-                                        {
-                                            name: "AES-GCM",
-                                            length: 256,
-                                        },
-                                        true,
-                                        ["encrypt", "decrypt"]
-                                    );
+                                const vaultKey = await window.crypto.subtle.generateKey(
+                                    {
+                                        name: 'AES-GCM',
+                                        length: 256,
+                                    },
+                                    true,
+                                    ['encrypt', 'decrypt']
+                                );
 
-                                const passphraseKey =
-                                    await window.crypto.subtle.importKey(
-                                        "raw",
-                                        passphraseKeyData,
-                                        {
-                                            name: "AES-KW",
-                                            length: 256,
-                                        },
-                                        true,
-                                        ["wrapKey", "unwrapKey"]
-                                    );
+                                const passphraseKey = await window.crypto.subtle.importKey(
+                                    'raw',
+                                    passphraseKeyData,
+                                    {
+                                        name: 'AES-KW',
+                                        length: 256,
+                                    },
+                                    true,
+                                    ['wrapKey', 'unwrapKey']
+                                );
 
                                 // Wrap vault key with passphrase derived key
                                 // Send wrapped vault key and passphrase hash to the server
                                 const passWrappedVaultKey = new Uint8Array(
-                                    await window.crypto.subtle.wrapKey(
-                                        "raw",
-                                        vaultKey,
-                                        passphraseKey,
-                                        "AES-KW"
-                                    )
+                                    await window.crypto.subtle.wrapKey('raw', vaultKey, passphraseKey, 'AES-KW')
                                 );
 
-                                fetch("/api/user/passphrase", {
-                                    method: "POST",
+                                fetch('/api/user/passphrase', {
+                                    method: 'POST',
                                     headers: {
-                                        "Content-Type": "application/json",
+                                        'Content-Type': 'application/json',
                                     },
                                     body: JSON.stringify({
-                                        passphraseWrappedVaultKey:
-                                            bytesToHex(passWrappedVaultKey),
-                                        passphraseKeySalt:
-                                            bytesToHex(passphraseKeySalt),
-                                        passphraseHash:
-                                            bytesToHex(passphraseHash),
+                                        passphraseWrappedVaultKey: bytesToHex(passWrappedVaultKey),
+                                        passphraseKeySalt: bytesToHex(passphraseKeySalt),
+                                        passphraseHash: bytesToHex(passphraseHash),
                                     }),
                                 }).then((res) => {
                                     setLoading(false);
 
                                     if (res.status === 201) {
-                                        window.location.replace("/login");
+                                        window.location.replace('/login');
                                     } else {
                                         // TODO
                                     }

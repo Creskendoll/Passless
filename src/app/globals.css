@@ -4,70 +4,77 @@
 
 @font-face {
     font-family: IBMPlexSans;
-    src: url("/IBMPlexSans-Regular.ttf");
+    src: url('/IBMPlexSans-Regular.ttf');
 }
 
 @font-face {
     font-family: IBMPlexSans;
-    src: url("/IBMPlexSans-Bold.ttf");
+    src: url('/IBMPlexSans-Bold.ttf');
     font-weight: bold;
 }
 
-p, a, h1, h2, h3, h4, h5, h6 {
+p,
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: IBMPlexSans;
 }
 
 .bg-light-purple {
-    background-color: #F2EFFA;
+    background-color: #f2effa;
 }
 
 .light-purple-underline {
-    border-bottom: #F2EFFA 2px solid;
+    border-bottom: #f2effa 2px solid;
 }
 
 .bg-medium-purple {
-    background-color: #CAC2F9;
+    background-color: #cac2f9;
 }
 
 .border-medium-purple {
-    border-color: #CAC2F9;
+    border-color: #cac2f9;
 }
 
 .dark-purple-dashed-border {
-    border: 3px dashed #8680DF;
+    border: 3px dashed #8680df;
 }
 
 .button.dark-purple-dashed-border:hover {
     border: none;
-    background-color: #F2EFFA;
+    background-color: #f2effa;
 }
 
 .dark-purple {
-    color: #8680DF;
+    color: #8680df;
 }
 
 .button.bg-dark-purple {
-    background-color: rgba(0,0,0,0);
-    border: 2px solid #8680DF;
-    color: #8680DF;
+    background-color: rgba(0, 0, 0, 0);
+    border: 2px solid #8680df;
+    color: #8680df;
 }
 
 .button.bg-dark-purple:hover {
-    background-color: #8680DF;
-    border: 2px solid rgba(0,0,0,0);
-    color: #FFFFFF;
+    background-color: #8680df;
+    border: 2px solid rgba(0, 0, 0, 0);
+    color: #ffffff;
 }
 
 .button.bg-dark-purple.secondary {
-    background-color: #8680DF;
-    border: 2px solid rgba(0,0,0,0);
-    color: #FFFFFF;
+    background-color: #8680df;
+    border: 2px solid rgba(0, 0, 0, 0);
+    color: #ffffff;
 }
 
 .button.bg-dark-purple.secondary:hover {
-    background-color: rgba(0,0,0,0);
-    border: 2px solid #8680DF;
-    color: #8680DF;
+    background-color: rgba(0, 0, 0, 0);
+    border: 2px solid #8680df;
+    color: #8680df;
 }
 
 .w-xl {
